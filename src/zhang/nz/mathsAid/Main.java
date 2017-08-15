@@ -13,7 +13,8 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("mainscreen.fxml")); // load FXML layout
         primaryStage.setTitle("Maths Authoring Aid");
         primaryStage.setResizable(false); // please don't resize
-        primaryStage.setScene(new Scene(root, 600, 400));
+        primaryStage.sizeToScene(); // for some reason setresizable expands the window???
+        primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
 
