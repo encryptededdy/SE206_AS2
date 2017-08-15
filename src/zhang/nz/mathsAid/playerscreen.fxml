@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.media.MediaView?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zhang.nz.mathsAid.BigPlayerController">
+   <children>
+      <MediaView fx:id="bigmediaview" fitHeight="337.5" fitWidth="600.0" />
+      <Separator prefWidth="200.0" />
+      <AnchorPane prefHeight="200.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="bigplayerback" layoutX="26.0" layoutY="17.0" mnemonicParsing="false" onAction="#bigPlayerBackPressed" prefHeight="25.0" prefWidth="70.0" text="Back" />
+            <Button fx:id="bigplayerreplay" layoutX="265.0" layoutY="17.0" mnemonicParsing="false" onAction="#bigPlayerReplayPressed" prefHeight="25.0" prefWidth="70.0" text="Replay" />
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>

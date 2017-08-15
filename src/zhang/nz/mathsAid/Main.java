@@ -7,13 +7,19 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 
+import java.net.URL;
+
 public class Main extends Application {
 
-    static Controller fxController;
+    static URL mainLayout;
+    static URL bigPlayerLayout;
+    static final String workingDir = "creations";
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("mainscreen.fxml")); // load FXML layout
+        mainLayout = getClass().getResource("mainscreen.fxml");
+        bigPlayerLayout = getClass().getResource("playerscreen.fxml");
+        Parent root = FXMLLoader.load(mainLayout); // load FXML layout
         primaryStage.setTitle("Maths Authoring Aid");
         primaryStage.setResizable(false); // please don't resize
         primaryStage.sizeToScene(); // for some reason setresizable expands the window???

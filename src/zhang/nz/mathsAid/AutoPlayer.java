@@ -11,12 +11,10 @@ import java.nio.file.Paths;
 
 public class AutoPlayer implements ChangeListener<String> {
     private MediaView _previewbox;
-    private String _workingDir;
     private boolean _mute = true;
 
-    public AutoPlayer (MediaView previewbox, String workingDir) {
+    public AutoPlayer (MediaView previewbox) {
         _previewbox = previewbox;
-        _workingDir = workingDir;
     }
 
     public void setMute (boolean mute) {
@@ -25,16 +23,18 @@ public class AutoPlayer implements ChangeListener<String> {
 
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-        File creation = Paths.get(_workingDir, newValue, "creation.mp4").toFile();
-        if (!creation.isFile()) {
-            DialogHandler.displayErrorBox("Corrupted or Invalid creation; cannot be played!");
-            return;
+        if (newValue != null) { // avoid issues after deletions etc.
+            File creation = Paths.get(Main.workingDir, newValue, "creation.mp4").toFile();
+            if (!creation.isFile()) {
+                DialogHandler.displayErrorBox("Corrupted or Invalid creation; cannot be played!");
+                return;
+            }
+            Media media = new Media(creation.toURI().toString());
+            System.out.println("Playing: " + creation);
+            MediaPlayer mediaplayer = new MediaPlayer(media);
+            mediaplayer.setAutoPlay(true);
+            mediaplayer.setMute(_mute);
+            _previewbox.setMediaPlayer(mediaplayer);
         }
-        Media media = new Media(creation.toURI().toString());
-        System.out.println("Playing: " + creation);
-        MediaPlayer mediaplayer = new MediaPlayer(media);
-        mediaplayer.setAutoPlay(true);
-        mediaplayer.setMute(_mute);
-        _previewbox.setMediaPlayer(mediaplayer);
     }
 }

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Button fx:id="cancelcreate" layoutX="24.0" layoutY="361.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Cancel" />
+      <TextField fx:id="nameField" layoutX="24.0" layoutY="59.0" prefHeight="25.0" prefWidth="486.0" promptText="Name your creation" />
+      <Label layoutX="232.0" layoutY="9.0" text="Creation Wizard">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <Button fx:id="nameOK" layoutX="524.0" layoutY="59.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="51.0" text="OK" />
+      <Label fx:id="nameInfo" layoutX="24.0" layoutY="92.0" text="Please enter a name" />
+      <Separator layoutY="123.0" prefWidth="600.0" />
+      <Separator layoutY="43.0" prefWidth="600.0" />
+      <Separator layoutY="343.0" prefWidth="600.0" />
+      <Button layoutX="24.0" layoutY="143.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" text="Record Audio" />
+      <Label layoutX="155.0" layoutY="147.0" text="Please record audio" />
+      <Button fx:id="savecreate" disable="true" layoutX="474.0" layoutY="361.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Save" />
+      <Button disable="true" layoutX="24.0" layoutY="188.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" text="Preview Audio" />
+      <Label layoutX="155.0" layoutY="192.0" text="Record audio first" />
+   </children>
+</AnchorPane>
