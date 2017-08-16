@@ -2,6 +2,8 @@ package zhang.nz.mathsAid;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,10 +15,7 @@ import javafx.scene.paint.Color;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,6 +24,10 @@ public class CreateController {
     @FXML private TextField nameField;
     @FXML private Label nameInfo;
     @FXML private Button nameOK;
+    @FXML private Button recordAudiobtn;
+    @FXML private Label recordAudioLabel;
+    @FXML private Button previewAudiobtn;
+    @FXML private Label previewAudioLabel;
     private List<String> _existingcreations;
 
     @FXML
@@ -33,6 +36,15 @@ public class CreateController {
         _existingcreations = Arrays.asList(file.list());
         BooleanBinding validationBinding = Bindings.createBooleanBinding(this::creationNameChecker, nameField.textProperty());
         nameOK.disableProperty().bind(validationBinding);
+    }
+
+    @FXML
+    protected void createOKpressed() { // proceed to recording audio mode
+        nameInfo.setText("Name saved");
+        nameField.setDisable(true);
+        nameOK.disableProperty().unbind();
+        nameOK.setDisable(true);
+        recordAudiobtn.setDisable(false);
     }
 
     private boolean creationNameChecker () {
@@ -66,5 +78,20 @@ public class CreateController {
         FXMLLoader loader = new FXMLLoader(Main.mainLayout);
         Parent root = loader.load();
         scene.setRoot(root);
+    }
+
+    @FXML
+    protected void recordPressed() {
+        AudioRecordingWorker recordingWorker = new AudioRecordingWorker(nameField.getText());
+        Thread recordingThread = new Thread(recordingWorker);
+        recordingWorker.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
+                new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent t) {
+                        String result = recordingWorker.getValue();
+                        recordAudioLabel.setText(result);
+                    }
+                });
+        recordingThread.start();
     }
 }
