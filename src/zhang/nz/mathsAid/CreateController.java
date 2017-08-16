@@ -85,11 +85,12 @@ public class CreateController {
         AudioRecordingWorker recordingWorker = new AudioRecordingWorker(nameField.getText());
         Thread recordingThread = new Thread(recordingWorker);
         recordingWorker.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
-                new EventHandler<WorkerStateEvent>() {
-                    @Override
-                    public void handle(WorkerStateEvent t) {
-                        String result = recordingWorker.getValue();
-                        recordAudioLabel.setText(result);
+                t -> {
+                    Boolean result = recordingWorker.getValue();
+                    if (result) {
+                        recordAudioLabel.setText("Audio recorded. Preview or record again");
+                    } else {
+                        recordAudioLabel.setText("ffmpeg encountered an error");
                     }
                 });
         recordingThread.start();
