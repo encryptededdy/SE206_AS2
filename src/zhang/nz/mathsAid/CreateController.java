@@ -45,6 +45,10 @@ public class CreateController {
         nameOK.disableProperty().unbind();
         nameOK.setDisable(true);
         recordAudiobtn.setDisable(false);
+        // Make the directory
+        if (!Paths.get(Main.workingDir, nameField.getText()).toFile().mkdir()) {
+            DialogHandler.displayErrorBox("MathsAid was unable to create the creations directory! This may mean it doesn't have permission to write to the current working directory");
+        }
     }
 
     private boolean creationNameChecker () {
@@ -94,5 +98,6 @@ public class CreateController {
                     }
                 });
         recordingThread.start();
+        recordAudioLabel.setText("Recording...");
     }
 }
