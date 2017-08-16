@@ -38,8 +38,13 @@ public class AudioRecordingWorker extends Task<Boolean> {
                 }
             }
         } catch (InterruptedException ex) {
-            Platform.runLater(() -> DialogHandler.displayErrorBox("Error running FFMPEG: "+ex.getMessage()));
+            creation.delete();
+            Paths.get(Main.workingDir, _creationName).toFile().delete();
             return false;
+        }
+        if (isCancelled()) { // if we've been cancelled, clean up.
+            creation.delete();
+            Paths.get(Main.workingDir, _creationName).toFile().delete();
         }
         return true;
     }

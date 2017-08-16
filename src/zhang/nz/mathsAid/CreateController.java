@@ -3,7 +3,6 @@ package zhang.nz.mathsAid;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -37,6 +36,8 @@ public class CreateController {
 
     private List<String> _existingcreations;
     private MediaPlayer _previewPlayer;
+    private AudioRecordingWorker _recordingWorker;
+    private CreationStitchWorker _stitchWorker;
 
     @FXML
     protected void initialize() {
@@ -91,6 +92,12 @@ public class CreateController {
         File creationOut = Paths.get(Main.workingDir, nameField.getText(), "creation.mp4").toFile();
         File creationDir = Paths.get(Main.workingDir, nameField.getText()).toFile();
 
+        if (_recordingWorker != null && _recordingWorker.isRunning()) {
+            _recordingWorker.cancel(); // cancel the worker if it's running
+        } else if (_stitchWorker != null && _stitchWorker.isRunning()) {
+            _stitchWorker.cancel(); // cancel the worker if it's running
+        }
+
         if (creationA.exists()) {
             creationA.delete();
         }
@@ -109,15 +116,15 @@ public class CreateController {
 
     @FXML
     protected void recordPressed() {
-        AudioRecordingWorker recordingWorker = new AudioRecordingWorker(nameField.getText());
-        Thread recordingThread = new Thread(recordingWorker);
-        recordingWorker.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
+        _recordingWorker = new AudioRecordingWorker(nameField.getText());
+        Thread recordingThread = new Thread(_recordingWorker);
+        _recordingWorker.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
                 t -> {
-                    Boolean result = recordingWorker.getValue();
+                    Boolean result = _recordingWorker.getValue();
                     if (result) {
                         recordAudioLabel.setText("Audio recorded. Preview or record again");
                         previewAudiobtn.setDisable(false);
-
+                        savecreate.setDisable(false);
                     } else {
                         recordAudioLabel.setText("ffmpeg encountered an error");
                     }
@@ -146,11 +153,11 @@ public class CreateController {
         recordAudiobtn.setDisable(true);
         creationIsBeingSaved.setVisible(true);
         creationSaving.setVisible(true);
-        CreationStitchWorker stitchWorker = new CreationStitchWorker(nameField.getText());
-        Thread stitchingThread = new Thread(stitchWorker);
-        stitchWorker.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
+        _stitchWorker = new CreationStitchWorker(nameField.getText());
+        Thread stitchingThread = new Thread(_stitchWorker);
+        _stitchWorker.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
                 t -> {
-                    Boolean result = stitchWorker.getValue();
+                    Boolean result = _stitchWorker.getValue();
                     if (!result) {
                         creationIsBeingSaved.setText("The creation was unable to be created");
                     } else {
