@@ -15,6 +15,7 @@ public class Main extends Application {
     static URL bigPlayerLayout;
     static URL createLayout;
     static final String workingDir = "creations";
+    static final boolean isWindows = System.getProperty("os.name").startsWith("Windows"); // Used for ffmpeg commands
 
     @Override
     public void start(Stage primaryStage) throws Exception{

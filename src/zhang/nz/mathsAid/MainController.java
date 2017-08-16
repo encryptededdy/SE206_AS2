@@ -53,6 +53,10 @@ public class MainController {
         if (previewbox.getMediaPlayer() != null) {
             previewbox.getMediaPlayer().stop(); // stop the preview player
         }
+        if (Main.isWindows) {
+            DialogHandler.displayErrorBox("Creating creations is unsupported on Windows at this time.");
+            return;
+        }
         Scene scene = createbtn.getScene();
         FXMLLoader loader = new FXMLLoader(Main.createLayout);
         Parent root = loader.load();
