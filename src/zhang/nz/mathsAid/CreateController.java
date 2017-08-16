@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -30,8 +31,11 @@ public class CreateController {
     @FXML private Button recordAudiobtn;
     @FXML private Label recordAudioLabel;
     @FXML private Button previewAudiobtn;
-    private List<String> _existingcreations;
+    @FXML private Button savecreate;
+    @FXML private Label creationIsBeingSaved;
+    @FXML private ProgressBar creationSaving;
 
+    private List<String> _existingcreations;
     private MediaPlayer _previewPlayer;
 
     @FXML
@@ -82,6 +86,21 @@ public class CreateController {
 
     @FXML
     protected void cancelledCreate() throws IOException {
+        // Clean up after ourselves if any files were created
+        File creationA = Paths.get(Main.workingDir, nameField.getText(), "audio.wav").toFile();
+        File creationOut = Paths.get(Main.workingDir, nameField.getText(), "creation.mp4").toFile();
+        File creationDir = Paths.get(Main.workingDir, nameField.getText()).toFile();
+
+        if (creationA.exists()) {
+            creationA.delete();
+        }
+        if (creationOut.exists()) {
+            creationOut.delete();
+        }
+        if (creationDir.exists()) {
+            creationDir.delete();
+        }
+
         Scene scene = cancelcreate.getScene();
         FXMLLoader loader = new FXMLLoader(Main.mainLayout);
         Parent root = loader.load();
@@ -98,6 +117,7 @@ public class CreateController {
                     if (result) {
                         recordAudioLabel.setText("Audio recorded. Preview or record again");
                         previewAudiobtn.setDisable(false);
+
                     } else {
                         recordAudioLabel.setText("ffmpeg encountered an error");
                     }
@@ -117,5 +137,33 @@ public class CreateController {
             _previewPlayer = new MediaPlayer(media);
             _previewPlayer.play();
         }
+    }
+
+    @FXML
+    protected void savePressed() {
+        // save the creation
+        savecreate.setDisable(true);
+        recordAudiobtn.setDisable(true);
+        creationIsBeingSaved.setVisible(true);
+        creationSaving.setVisible(true);
+        CreationStitchWorker stitchWorker = new CreationStitchWorker(nameField.getText());
+        Thread stitchingThread = new Thread(stitchWorker);
+        stitchWorker.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
+                t -> {
+                    Boolean result = stitchWorker.getValue();
+                    if (!result) {
+                        creationIsBeingSaved.setText("The creation was unable to be created");
+                    } else {
+                        Scene scene = savecreate.getScene();
+                        FXMLLoader loader = new FXMLLoader(Main.mainLayout);
+                        try {
+                            Parent root = loader.load();
+                            scene.setRoot(root);
+                        } catch (IOException e) {
+                            DialogHandler.displayErrorBox("Critical Error: Unable to switch views");
+                        }
+                    }
+                });
+        stitchingThread.start();
     }
 }

@@ -2,6 +2,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -9,7 +10,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="zhang.nz.mathsAid.CreateController">
    <children>
-      <Button fx:id="cancelcreate" layoutX="24.0" layoutY="361.0" mnemonicParsing="false" onAction="#cancelledCreate" prefHeight="25.0" prefWidth="100.0" text="Cancel" />
+      <Button fx:id="cancelcreate" layoutX="24.0" layoutY="340.0" mnemonicParsing="false" onAction="#cancelledCreate" prefHeight="44.0" prefWidth="100.0" text="Cancel" />
       <TextField fx:id="nameField" layoutX="24.0" layoutY="59.0" prefHeight="25.0" prefWidth="486.0" promptText="Name your creation" />
       <Label layoutX="232.0" layoutY="9.0" text="Creation Wizard">
          <font>
@@ -20,10 +21,12 @@
       <Label fx:id="nameInfo" layoutX="24.0" layoutY="92.0" text="Please enter a name" />
       <Separator layoutY="123.0" prefWidth="600.0" />
       <Separator layoutY="43.0" prefWidth="600.0" />
-      <Separator layoutY="343.0" prefWidth="600.0" />
-      <Button fx:id="recordAudiobtn" disable="true" layoutX="24.0" layoutY="143.0" mnemonicParsing="false" onAction="#recordPressed" prefHeight="25.0" prefWidth="107.0" text="Record Audio" />
-      <Label fx:id="recordAudioLabel" layoutX="155.0" layoutY="147.0" text="Please record audio" />
-      <Button fx:id="savecreate" disable="true" layoutX="474.0" layoutY="361.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Save" />
-      <Button fx:id="previewAudiobtn" disable="true" layoutX="24.0" layoutY="188.0" mnemonicParsing="false" onAction="#previewPressed" prefHeight="25.0" prefWidth="107.0" text="Preview Audio" />
+      <Separator layoutY="327.0" prefWidth="600.0" />
+      <Button fx:id="recordAudiobtn" disable="true" layoutX="24.0" layoutY="143.0" mnemonicParsing="false" onAction="#recordPressed" prefHeight="25.0" prefWidth="137.0" text="Record Audio" />
+      <Label fx:id="recordAudioLabel" layoutX="180.0" layoutY="147.0" text="Please record audio" />
+      <Button fx:id="savecreate" disable="true" layoutX="474.0" layoutY="340.0" mnemonicParsing="false" onAction="#savePressed" prefHeight="44.0" prefWidth="100.0" text="Save" />
+      <Button fx:id="previewAudiobtn" disable="true" layoutX="24.0" layoutY="188.0" mnemonicParsing="false" onAction="#previewPressed" prefHeight="25.0" prefWidth="137.0" text="Preview Audio" />
+      <Label fx:id="creationIsBeingSaved" layoutX="222.0" layoutY="340.0" text="Your creation is being saved..." visible="false" />
+      <ProgressBar fx:id="creationSaving" layoutX="201.0" layoutY="362.0" prefWidth="200.0" visible="false" />
    </children>
 </AnchorPane>
