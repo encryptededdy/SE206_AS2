@@ -26,12 +26,12 @@ public class MainController {
     @FXML private CheckBox autoplaymute;
 
     private AutoPlayer autoplayer;
-
+    // TODO: Disable buttons until something gets selected
     @FXML
     protected void initialize() {
         populateCreations();
         // add our autoplayer as a listener to selection changes
-        autoplayer = new AutoPlayer(previewbox);
+        autoplayer = new AutoPlayer(previewbox, playbtn, deletebtn);
         creationlist.getSelectionModel().selectedItemProperty().addListener(autoplayer);
     }
 
