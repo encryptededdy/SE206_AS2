@@ -13,12 +13,15 @@ public class Main extends Application {
 
     static URL mainLayout;
     static URL bigPlayerLayout;
+    static URL createLayout;
     static final String workingDir = "creations";
 
     @Override
     public void start(Stage primaryStage) throws Exception{
         mainLayout = getClass().getResource("mainscreen.fxml");
         bigPlayerLayout = getClass().getResource("playerscreen.fxml");
+        createLayout = getClass().getResource("createscreen.fxml");
+
         Parent root = FXMLLoader.load(mainLayout); // load FXML layout
         primaryStage.setTitle("Maths Authoring Aid");
         primaryStage.setResizable(false); // please don't resize

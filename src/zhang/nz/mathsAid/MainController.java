@@ -26,7 +26,6 @@ public class MainController {
     @FXML private CheckBox autoplaymute;
 
     private AutoPlayer autoplayer;
-    // TODO: Disable buttons until something gets selected
     @FXML
     protected void initialize() {
         populateCreations();
@@ -39,12 +38,25 @@ public class MainController {
 
     @FXML
     protected void playPressed() throws IOException {
-        previewbox.getMediaPlayer().stop(); // stop the preview player
+        if (previewbox.getMediaPlayer() != null) {
+            previewbox.getMediaPlayer().stop(); // stop the preview player
+        }
         Scene scene = playbtn.getScene();
         FXMLLoader loader = new FXMLLoader(Main.bigPlayerLayout);
         Parent root = loader.load();
         scene.setRoot(root);
         loader.<BigPlayerController>getController().setVideo(creationlist.getSelectionModel().getSelectedItem()); // pass the video that was selected
+    }
+
+    @FXML
+    protected void createPressed() throws IOException {
+        if (previewbox.getMediaPlayer() != null) {
+            previewbox.getMediaPlayer().stop(); // stop the preview player
+        }
+        Scene scene = createbtn.getScene();
+        FXMLLoader loader = new FXMLLoader(Main.createLayout);
+        Parent root = loader.load();
+        scene.setRoot(root);
     }
 
     @FXML
