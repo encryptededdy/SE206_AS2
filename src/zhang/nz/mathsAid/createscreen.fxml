@@ -24,7 +24,6 @@
       <Button fx:id="recordAudiobtn" disable="true" layoutX="24.0" layoutY="143.0" mnemonicParsing="false" onAction="#recordPressed" prefHeight="25.0" prefWidth="107.0" text="Record Audio" />
       <Label fx:id="recordAudioLabel" layoutX="155.0" layoutY="147.0" text="Please record audio" />
       <Button fx:id="savecreate" disable="true" layoutX="474.0" layoutY="361.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Save" />
-      <Button fx:id="previewAudiobtn" disable="true" layoutX="24.0" layoutY="188.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="107.0" text="Preview Audio" />
-      <Label fx:id="previewAudioLabel" layoutX="155.0" layoutY="192.0" text="Record audio first" />
+      <Button fx:id="previewAudiobtn" disable="true" layoutX="24.0" layoutY="188.0" mnemonicParsing="false" onAction="#previewPressed" prefHeight="25.0" prefWidth="107.0" text="Preview Audio" />
    </children>
 </AnchorPane>

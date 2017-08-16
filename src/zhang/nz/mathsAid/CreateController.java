@@ -11,7 +11,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,8 +30,9 @@ public class CreateController {
     @FXML private Button recordAudiobtn;
     @FXML private Label recordAudioLabel;
     @FXML private Button previewAudiobtn;
-    @FXML private Label previewAudioLabel;
     private List<String> _existingcreations;
+
+    private MediaPlayer _previewPlayer;
 
     @FXML
     protected void initialize() {
@@ -93,11 +97,25 @@ public class CreateController {
                     Boolean result = recordingWorker.getValue();
                     if (result) {
                         recordAudioLabel.setText("Audio recorded. Preview or record again");
+                        previewAudiobtn.setDisable(false);
                     } else {
                         recordAudioLabel.setText("ffmpeg encountered an error");
                     }
                 });
         recordingThread.start();
         recordAudioLabel.setText("Recording...");
+    }
+
+    @FXML
+    protected void previewPressed() {
+        if (_previewPlayer != null) {
+            _previewPlayer.seek(new Duration(0));
+            _previewPlayer.play();
+        } else {
+            File creation = Paths.get(Main.workingDir, nameField.getText(), "audio.wav").toFile();
+            Media media = new Media(creation.toURI().toString());
+            _previewPlayer = new MediaPlayer(media);
+            _previewPlayer.play();
+        }
     }
 }
