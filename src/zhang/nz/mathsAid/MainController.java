@@ -85,15 +85,16 @@ public class MainController {
     protected void deletePressed() { // delete a file
         String file = creationlist.getSelectionModel().getSelectedItem();
         if (DialogHandler.confirmationBox("Are you sure you want to delete the creation \"" + file + "\"?")) { // ask for confirmation of deletion
+            autoplayer.stop();
             File creationVideo = Paths.get(Main.workingDir, file, "creation.mp4").toFile();
             if (creationVideo.exists()) {
                 if (!creationVideo.delete()) {
-                    DialogHandler.displayErrorBox("File deletion failed - check write permissions");
+                    DialogHandler.displayErrorBox("File deletion failed (mp4) - check write permissions");
                 }
             }
             File creationDir = Paths.get(Main.workingDir, file).toFile();
             if (!creationDir.delete()) {
-                DialogHandler.displayErrorBox("File deletion failed - check write permissions");
+                DialogHandler.displayErrorBox("File deletion failed (dir) - check write permissions");
             }
             populateCreations(); // reload creation list
         }

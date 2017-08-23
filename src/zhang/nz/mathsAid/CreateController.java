@@ -7,10 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
@@ -92,6 +89,11 @@ public class CreateController {
         File creationOut = Paths.get(Main.workingDir, nameField.getText(), "creation.mp4").toFile();
         File creationDir = Paths.get(Main.workingDir, nameField.getText()).toFile();
 
+        if (_previewPlayer != null) {
+            _previewPlayer.stop();
+            _previewPlayer.dispose(); // release file locks
+        }
+
         if (_recordingWorker != null && _recordingWorker.isRunning()) {
             _recordingWorker.cancel(); // cancel the worker if it's running
         } else if (_stitchWorker != null && _stitchWorker.isRunning()) {
@@ -103,6 +105,11 @@ public class CreateController {
         }
         if (creationOut.exists()) {
             creationOut.delete();
+        }
+        try {
+            Thread.sleep(300); // wait for processes to die (bad solution, but only thing that seems to work)
+        } catch (InterruptedException e) {
+            DialogHandler.displayErrorBox("Failed to cancel");
         }
         if (creationDir.exists()) {
             creationDir.delete();

@@ -16,6 +16,8 @@ public class AutoPlayer implements ChangeListener<String> {
     private Button _playbtn;
     private Button _deletebtn;
 
+    private MediaPlayer _player;
+
     public AutoPlayer (MediaView previewbox, Button playbtn, Button deletebtn) {
         _previewbox = previewbox;
         _playbtn = playbtn;
@@ -24,6 +26,12 @@ public class AutoPlayer implements ChangeListener<String> {
 
     public void setMute (boolean mute) {
         _mute = mute;
+    }
+
+    public void stop () {
+        if (_player != null) {
+            _player.dispose(); // Releases the file lock to work around a JFX bug
+        }
     }
 
     @Override
@@ -39,10 +47,10 @@ public class AutoPlayer implements ChangeListener<String> {
             }
             Media media = new Media(creation.toURI().toString());
             //System.out.println("Playing: " + creation);
-            MediaPlayer mediaplayer = new MediaPlayer(media);
-            mediaplayer.setAutoPlay(true);
-            mediaplayer.setMute(_mute);
-            _previewbox.setMediaPlayer(mediaplayer);
+            _player = new MediaPlayer(media);
+            _player.setAutoPlay(true);
+            _player.setMute(_mute);
+            _previewbox.setMediaPlayer(_player);
         }
     }
 }
