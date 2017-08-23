@@ -38,7 +38,7 @@ public class AutoPlayer implements ChangeListener<String> {
                 return;
             }
             Media media = new Media(creation.toURI().toString());
-            System.out.println("Playing: " + creation);
+            //System.out.println("Playing: " + creation);
             MediaPlayer mediaplayer = new MediaPlayer(media);
             mediaplayer.setAutoPlay(true);
             mediaplayer.setMute(_mute);
