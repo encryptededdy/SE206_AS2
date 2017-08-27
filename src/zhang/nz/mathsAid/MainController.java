@@ -55,7 +55,7 @@ public class MainController {
         }
         if (Main.isWindows) {
             DialogHandler.displayErrorBox("Creating creations is unsupported on Windows at this time.");
-            return;
+            //return;
         }
         Scene scene = createbtn.getScene();
         FXMLLoader loader = new FXMLLoader(Main.createLayout);

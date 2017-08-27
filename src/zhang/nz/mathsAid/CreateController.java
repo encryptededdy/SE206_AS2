@@ -35,6 +35,7 @@ public class CreateController {
     private MediaPlayer _previewPlayer;
     private AudioRecordingWorker _recordingWorker;
     private CreationStitchWorker _stitchWorker;
+    private boolean _saved = false;
 
     @FXML
     protected void initialize() {
@@ -46,15 +47,27 @@ public class CreateController {
 
     @FXML
     protected void createOKpressed() { // proceed to recording audio mode
+        if (_existingcreations.contains(nameField.getText())) {
+            if (DialogHandler.confirmationBox("Are you sure you want to overwrite "+nameField.getText())) {
+                File creationOut = Paths.get(Main.workingDir, nameField.getText(), "creation.mp4").toFile();
+                if (!creationOut.delete()) {
+                    DialogHandler.displayErrorBox("Failed to overwrite");
+                }
+            } else {
+                return;
+            }
+        } else {
+            // Make the directory
+            if (!Paths.get(Main.workingDir, nameField.getText()).toFile().mkdir()) {
+                DialogHandler.displayErrorBox("MathsAid was unable to create the creations directory! This may mean it doesn't have permission to write to the current working directory");
+            }
+        }
+        _saved = true;
         nameInfo.setText("Name saved");
         nameField.setDisable(true);
         nameOK.disableProperty().unbind();
         nameOK.setDisable(true);
         recordAudiobtn.setDisable(false);
-        // Make the directory
-        if (!Paths.get(Main.workingDir, nameField.getText()).toFile().mkdir()) {
-            DialogHandler.displayErrorBox("MathsAid was unable to create the creations directory! This may mean it doesn't have permission to write to the current working directory");
-        }
     }
 
     private boolean creationNameChecker () {
@@ -64,19 +77,23 @@ public class CreateController {
         } catch (Exception e){
             nameInfo.setTextFill(Color.RED);
             nameInfo.setText("Invalid name");
+            nameOK.setText("OK");
             return true;
         }
         if (name.isEmpty()) {
             nameInfo.setTextFill(Color.RED);
             nameInfo.setText("Please enter a name");
+            nameOK.setText("OK");
             return true;
         } else if (_existingcreations.contains(name)) {
             nameInfo.setTextFill(Color.RED);
-            nameInfo.setText("Creation already exists");
-            return true;
+            nameInfo.setText("Creation already exists - will overwrite");
+            nameOK.setText("Overwrite");
+            return false;
         } else {
             nameInfo.setTextFill(Color.BLACK);
             nameInfo.setText("Press OK to continue");
+            nameOK.setText("OK");
             return false;
         }
 
@@ -99,20 +116,21 @@ public class CreateController {
         } else if (_stitchWorker != null && _stitchWorker.isRunning()) {
             _stitchWorker.cancel(); // cancel the worker if it's running
         }
-
-        if (creationA.exists()) {
-            creationA.delete();
-        }
-        if (creationOut.exists()) {
-            creationOut.delete();
-        }
-        try {
-            Thread.sleep(300); // wait for processes to die (bad solution, but only thing that seems to work)
-        } catch (InterruptedException e) {
-            DialogHandler.displayErrorBox("Failed to cancel");
-        }
-        if (creationDir.exists()) {
-            creationDir.delete();
+        if (_saved) {
+            if (creationA.exists()) {
+                creationA.delete();
+            }
+            if (creationOut.exists()) {
+                creationOut.delete();
+            }
+            try {
+                Thread.sleep(100); // wait for processes to die (bad solution, but only thing that seems to work)
+            } catch (InterruptedException e) {
+                DialogHandler.displayErrorBox("Failed to cancel");
+            }
+            if (creationDir.exists()) {
+                creationDir.delete();
+            }
         }
 
         Scene scene = cancelcreate.getScene();
@@ -123,10 +141,12 @@ public class CreateController {
 
     @FXML
     protected void recordPressed() {
+        cancelcreate.setDisable(true);
         _recordingWorker = new AudioRecordingWorker(nameField.getText());
         Thread recordingThread = new Thread(_recordingWorker);
         _recordingWorker.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
                 t -> {
+                    cancelcreate.setDisable(false);
                     Boolean result = _recordingWorker.getValue();
                     if (result) {
                         recordAudioLabel.setText("Audio recorded. Preview or record again");
