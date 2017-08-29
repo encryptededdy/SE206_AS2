@@ -59,7 +59,7 @@ public class CreateController {
         } else {
             // Make the directory
             if (!Paths.get(Main.workingDir, nameField.getText()).toFile().mkdir()) {
-                DialogHandler.displayErrorBox("MathsAid was unable to create the creations directory! This may mean it doesn't have permission to write to the current working directory");
+                DialogHandler.displayErrorBox("MathsAid was unable to create the directory! This may mean it doesn't have permission to write to the current working directory");
             }
         }
         _saved = true;
@@ -142,11 +142,13 @@ public class CreateController {
     @FXML
     protected void recordPressed() {
         cancelcreate.setDisable(true);
+        recordAudiobtn.setDisable(true);
         _recordingWorker = new AudioRecordingWorker(nameField.getText());
         Thread recordingThread = new Thread(_recordingWorker);
         _recordingWorker.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
                 t -> {
                     cancelcreate.setDisable(false);
+                    recordAudiobtn.setDisable(false);
                     Boolean result = _recordingWorker.getValue();
                     if (result) {
                         recordAudioLabel.setText("Audio recorded. Preview or record again");
@@ -185,6 +187,10 @@ public class CreateController {
         _stitchWorker.addEventHandler(WorkerStateEvent.WORKER_STATE_SUCCEEDED,
                 t -> {
                     Boolean result = _stitchWorker.getValue();
+                    if (_previewPlayer != null) {
+                        _previewPlayer.stop();
+                        _previewPlayer.dispose(); // release file locks
+                    }
                     if (!result) {
                         creationIsBeingSaved.setText("The creation was unable to be created");
                     } else {

@@ -38,13 +38,8 @@ public class BigPlayerController {
         if (_mediaplayer != null) {
             _mediaplayer.stop(); // stop the video
             _mediaplayer.dispose(); // release file lock
+            //System.out.println("disposed");
         }
-        Scene scene = bigplayerback.getScene();
-        Parent root = FXMLLoader.load(Main.mainLayout);
-        scene.setRoot(root);
-    }
-
-    private void backToMain() throws IOException {
         Scene scene = bigplayerback.getScene();
         Parent root = FXMLLoader.load(Main.mainLayout);
         scene.setRoot(root);
