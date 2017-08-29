@@ -39,6 +39,7 @@ public class MainController {
     @FXML
     protected void playPressed() throws IOException {
         if (previewbox.getMediaPlayer() != null) {
+            previewbox.getMediaPlayer().dispose(); // dispose
             previewbox.getMediaPlayer().stop(); // stop the preview player
         }
         Scene scene = playbtn.getScene();
@@ -51,6 +52,7 @@ public class MainController {
     @FXML
     protected void createPressed() throws IOException {
         if (previewbox.getMediaPlayer() != null) {
+            previewbox.getMediaPlayer().dispose(); // dispose
             previewbox.getMediaPlayer().stop(); // stop the preview player
         }
         if (Main.isWindows) {
@@ -85,7 +87,10 @@ public class MainController {
     protected void deletePressed() { // delete a file
         String file = creationlist.getSelectionModel().getSelectedItem();
         if (DialogHandler.confirmationBox("Are you sure you want to delete the creation \"" + file + "\"?")) { // ask for confirmation of deletion
-            autoplayer.stop();
+            if (previewbox.getMediaPlayer() != null) {
+                previewbox.getMediaPlayer().stop();
+                previewbox.getMediaPlayer().dispose();
+            }
             File creationVideo = Paths.get(Main.workingDir, file, "creation.mp4").toFile();
             if (creationVideo.exists()) {
                 if (!creationVideo.delete()) {

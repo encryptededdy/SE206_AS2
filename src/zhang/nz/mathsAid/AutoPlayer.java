@@ -28,12 +28,6 @@ public class AutoPlayer implements ChangeListener<String> {
         _mute = mute;
     }
 
-    public void stop () {
-        if (_player != null) {
-            _player.dispose(); // Releases the file lock to work around a JFX bug
-        }
-    }
-
     @Override
     public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
         if (newValue != null) { // avoid issues after deletions etc.
