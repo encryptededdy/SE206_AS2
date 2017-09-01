@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CreateController {
     @FXML private Button cancelcreate;
@@ -80,6 +82,9 @@ public class CreateController {
             nameOK.setText("OK");
             return true;
         }
+        Pattern p = Pattern.compile("[^a-zA-Z\\d\\s:]");
+        Matcher m = p.matcher(name);
+
         if (name.isEmpty()) {
             nameInfo.setTextFill(Color.RED);
             nameInfo.setText("Please enter a name");
@@ -90,6 +95,11 @@ public class CreateController {
             nameInfo.setText("Creation already exists - will overwrite");
             nameOK.setText("Overwrite");
             return false;
+        } else if (m.find()) {
+            nameInfo.setTextFill(Color.RED);
+            nameInfo.setText("Invalid name");
+            nameOK.setText("OK");
+            return true;
         } else {
             nameInfo.setTextFill(Color.BLACK);
             nameInfo.setText("Press OK to continue");
