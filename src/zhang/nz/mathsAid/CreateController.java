@@ -82,7 +82,7 @@ public class CreateController {
             nameOK.setText("OK");
             return true;
         }
-        Pattern p = Pattern.compile("[^a-zA-Z\\d\\s:]");
+        Pattern p = Pattern.compile("[^a-zA-Z-_.\\d\\s:]");
         Matcher m = p.matcher(name);
 
         if (name.isEmpty()) {

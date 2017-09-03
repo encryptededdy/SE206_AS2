@@ -86,7 +86,7 @@ public class MainController {
     @FXML
     protected void deletePressed() { // delete a file
         String file = creationlist.getSelectionModel().getSelectedItem();
-        if (DialogHandler.confirmationBox("Are you sure you want to delete the creation \"" + file + "\"?")) { // ask for confirmation of deletion
+        if (DialogHandler.confirmationBox("Are you sure you want to delete \"" + file + "\"?")) { // ask for confirmation of deletion
             if (previewbox.getMediaPlayer() != null) {
                 previewbox.getMediaPlayer().stop();
                 previewbox.getMediaPlayer().dispose();
@@ -102,6 +102,8 @@ public class MainController {
                 DialogHandler.displayErrorBox("File deletion failed (dir) - check write permissions");
             }
             populateCreations(); // reload creation list
+            playbtn.setDisable(true);
+            deletebtn.setDisable(true);
         }
     }
 
